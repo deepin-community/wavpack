@@ -1,0 +1,57 @@
+Source: wavpack
+Section: sound
+Priority: optional
+Maintainer: Debian Multimedia Maintainers <debian-multimedia@lists.debian.org>
+Uploaders: Sebastian Dröge <slomo@debian.org>,
+           Sebastian Ramacher <sramacher@debian.org>
+Build-Depends: debhelper-compat (= 13)
+Standards-Version: 4.5.1
+Homepage: http://www.wavpack.com
+Vcs-Git: https://salsa.debian.org/multimedia-team/wavpack.git
+Vcs-Browser: https://salsa.debian.org/multimedia-team/wavpack
+Rules-Requires-Root: no
+
+Package: libwavpack1
+Architecture: any
+Multi-Arch: same
+Section: libs
+Depends: ${shlibs:Depends},
+         ${misc:Depends}
+Description: audio codec (lossy and lossless) - library
+ WavPack is a completely open audio compression format providing lossless,
+ high-quality lossy, and a unique hybrid compression mode. Although the
+ technology is loosely based on previous versions of WavPack, the new version
+ 4 format has been designed from the ground up to offer unparalleled
+ performance and functionality.
+ .
+ This package contains the shared libraries necessary to run programs
+ using libwavpack.
+
+Package: libwavpack-dev
+Architecture: any
+Multi-Arch: same
+Section: libdevel
+Depends: libwavpack1 (= ${binary:Version}),
+         ${misc:Depends}
+Description: audio codec (lossy and lossless) - development files
+ WavPack is a completely open audio compression format providing lossless,
+ high-quality lossy, and a unique hybrid compression mode. Although the
+ technology is loosely based on previous versions of WavPack, the new version
+ 4 format has been designed from the ground up to offer unparalleled
+ performance and functionality.
+ .
+ This package contains the header files, static libraries
+ and symbolic links that developers using libwavpack will need.
+
+Package: wavpack
+Architecture: any
+Depends: ${shlibs:Depends},
+         ${misc:Depends}
+Description: audio codec (lossy and lossless) - encoder and decoder
+ WavPack is a completely open audio compression format providing lossless,
+ high-quality lossy, and a unique hybrid compression mode. Although the
+ technology is loosely based on previous versions of WavPack, the new version
+ 4 format has been designed from the ground up to offer unparalleled
+ performance and functionality.
+ .
+ This package contains an encoder and decoder for wavpack files.

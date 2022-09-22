@@ -1,0 +1,363 @@
+wavpack (5.4.0-1) unstable; urgency=medium
+
+  * New upstream release
+  * debian/patches: Drop patches integrated upstream
+
+ -- Sebastian Ramacher <sramacher@debian.org>  Wed, 20 Jan 2021 21:40:02 +0100
+
+wavpack (5.3.0-2) unstable; urgency=medium
+
+  * debian/control: Bump Standards-Version
+  * debian/: Bump debhelper compat to 13
+  * debian/patches: Add upstream patches for CVE-2020-35738 (Closes: #978548)
+
+ -- Sebastian Ramacher <sramacher@debian.org>  Wed, 30 Dec 2020 10:40:48 +0100
+
+wavpack (5.3.0-1) unstable; urgency=medium
+
+  [ Debian Janitor ]
+  * Set upstream metadata fields: Bug-Database, Bug-Submit, Repository,
+    Repository-Browse.
+
+  [ Sebastian Ramacher ]
+  * New upstream release
+  * debian/control: Bump Standards-Version
+
+ -- Sebastian Ramacher <sramacher@debian.org>  Tue, 21 Apr 2020 22:25:00 +0200
+
+wavpack (5.2.0-1) unstable; urgency=medium
+
+  [ Ondřej Nový ]
+  * Bump Standards-Version to 4.4.1
+
+  [ Sebastian Ramacher ]
+  * New upstream version 5.2.0
+  * debian/rules: Override with new changelog path
+  * debian/patches: Remove all patches, all included upstream
+  * debian/control: Set RRR: no
+
+ -- Sebastian Ramacher <sramacher@debian.org>  Tue, 31 Dec 2019 09:46:04 +0100
+
+wavpack (5.1.0-7) unstable; urgency=medium
+
+  * debian/patches: Cherry-pick upstream patches to fix use of uninitialized
+    values. (CVE-2019-1010317, CVE-2019-1010319) (Closes: #932060, #932061)
+  * debian/: Bump debhelper compat to 12.
+  * debian/control: Bump Standards-Version.
+
+ -- Sebastian Ramacher <sramacher@debian.org>  Sun, 14 Jul 2019 21:10:51 +0200
+
+wavpack (5.1.0-6) unstable; urgency=medium
+
+  * debian/patches: Cherry-pick upstream patches to fix use of uninitialized
+    values. (CVE-2019-11498) (Closes: #927903)
+
+ -- Sebastian Ramacher <sramacher@debian.org>  Sun, 28 Apr 2019 23:30:18 +0200
+
+wavpack (5.1.0-5) unstable; urgency=medium
+
+  * debian/control: Bump Standards-Version.
+  * debian/patches: Cherry-pick upstream patches for multiple CVEs
+    (CVE-2018-19840, CVE-2018-19841). (Closes: #915564, #915565)
+
+ -- Sebastian Ramacher <sramacher@debian.org>  Wed, 05 Dec 2018 09:43:52 +0100
+
+wavpack (5.1.0-4) unstable; urgency=medium
+
+  * debian/control:
+    - Remove old Pre-Depends.
+    - Add myself to Uploaders.
+    - Bump Standards-Version.
+  * debian/copyright: Convert to CF-1.0.
+  * debian/:
+    - Convert to dh.
+    - Bump debhelper compat level to 11.
+  * debian/watch: Update to version 4.
+  * debian/rules: Build with all hardening options enabled.
+
+ -- Sebastian Ramacher <sramacher@debian.org>  Sat, 28 Jul 2018 17:53:07 +0200
+
+wavpack (5.1.0-3) unstable; urgency=medium
+
+  * Team upload.
+
+  [ Ondřej Nový ]
+  * d/control: Set Vcs-* to salsa.debian.org
+  * d/rules: Remove trailing whitespaces
+
+  [ Felipe Sateler ]
+  * Change maintainer address to debian-multimedia@lists.debian.org
+
+  [ Sebastian Ramacher ]
+  * debian/control: Bump Standards-Version.
+  * debian/patches:
+    - Cherry-pick upstream patches for multiple CVEs (CVE-2018-7254,
+      CVE-2018-7253, CVE-2018-6767, CVE-2018-10540, CVE-2018-10539,
+      CVE-2018-10538, CVE-2018-10537, CVE-2018-10536). (Closes: #889274,
+      #889276, #889559, #897271, #890014)
+    - Fix a memory leak.
+
+ -- Sebastian Ramacher <sramacher@debian.org>  Tue, 01 May 2018 09:52:12 +0200
+
+wavpack (5.1.0-2) unstable; urgency=medium
+
+  * Bump Standards-Version to 4.0.0.
+  * Drop myself from Uploaders.
+
+ -- Loïc Minier <lool@debian.org>  Sun, 09 Jul 2017 21:32:49 +0200
+
+wavpack (5.1.0-1) unstable; urgency=medium
+
+  * Team upload.
+  * New upstream release.
+  * debian/patches: Removed patches included upstream.
+  * debian/copyright: Update copyright years.
+
+ -- Sebastian Ramacher <sramacher@debian.org>  Thu, 15 Jun 2017 12:59:20 +0200
+
+wavpack (5.0.0-2) unstable; urgency=medium
+
+  * Team upload.
+  * debian/patches: Apply upstream fix to fix some fuzz failures
+    (CVE-2016-10169, CVE-2016-10170, CVE-2016-10171, CVE-2016-10172). (Closes:
+    #853076)
+
+ -- Sebastian Ramacher <sramacher@debian.org>  Mon, 30 Jan 2017 21:04:05 +0100
+
+wavpack (5.0.0-1) unstable; urgency=medium
+
+  * Team upload.
+  * New upstream release.
+  * debian/libwavpack1.symbols: Add new symbols.
+  * debian/copyright: Update copyright information.
+  * debian/control: Bump Standards-Version.
+
+ -- Sebastian Ramacher <sramacher@debian.org>  Mon, 02 Jan 2017 13:56:51 +0100
+
+wavpack (4.80.0-1) unstable; urgency=medium
+
+  * Team upload.
+  * New upstream release.
+  * debian/patches/mark-stack-non-executable.patch: Removed, included
+    upstream.
+  * debian/control:
+    - Bump Standards-Version, no changes needed.
+    - Update Vcs-*.
+
+ -- Sebastian Ramacher <sramacher@debian.org>  Tue, 05 Apr 2016 21:47:45 +0200
+
+wavpack (4.75.2-2) unstable; urgency=medium
+
+  * Team upload.
+  * debian/rules:
+    - No longer pass --enable-mmx on amd64. It was removed.
+    - Pass --disable-asm on armel and armhf to fix FTBFS.
+
+ -- Sebastian Ramacher <sramacher@debian.org>  Sun, 17 Jan 2016 17:39:03 +0100
+
+wavpack (4.75.2-1) unstable; urgency=medium
+
+  * Team upload.
+  * New upstream release.
+  * debian/patches/mark-stack-non-executable.patch: Mark stack as
+    non-executable. Thanks to Russell Coker for the patch. (Closes: #793320)
+  * debian/control: Remove ${shlibs:Depends} from libwavpack-dev's Depends.
+
+ -- Sebastian Ramacher <sramacher@debian.org>  Sun, 17 Jan 2016 13:39:23 +0100
+
+wavpack (4.75.0-1) unstable; urgency=medium
+
+  * Team upload.
+  * New upstream release:
+    - improved: reorganization for modularity and to improve linking
+    - added: assembler optimizations for encode/decode on x86 and x64
+    - added: assembler optimizations for decoding on ARMv7 (Linux)
+    - improved: several minor speed optimizations using intrinsics
+    - fixed: wavpack.pc.in not working correctly on some Linux distros
+    - fixed: memcpy() issue causing abort() on OpenBSD
+  * Touch Standards-Version
+
+ -- Alessio Treglia <alessio@debian.org>  Wed, 10 Jun 2015 19:17:14 +0100
+
+wavpack (4.70.0-1) unstable; urgency=low
+
+  * New upstream release:
+    + debian/patches/0001-pkgconfig.patch,
+      debian/patches/0002-largefile.patch:
+      - Drop patches that were merged upstream.
+
+ -- Sebastian Dröge <slomo@debian.org>  Thu, 31 Oct 2013 16:47:06 +0100
+
+wavpack (4.60.1-3) unstable; urgency=low
+
+  * Team upload.
+  * Check for large files support on 32-bit systems too.
+    Thanks to Frank Lübeck for the report. (Closes: #666340)
+  * Add dh-autoreconf to the build.
+  * Bump debhelper requirement to match debian/compat.
+  * Bump Standards.
+
+ -- Alessio Treglia <alessio@debian.org>  Sun, 01 Apr 2012 11:43:30 +0200
+
+wavpack (4.60.1-2) unstable; urgency=low
+
+  * Team upload.
+  * Enable Multi-Arch support (Closes: #651017):
+    - debian/{*.install,control,rules}: Update references and enable
+      Multi-Arch: same; patch from Becka Morgan.
+    - debian/patches/0001-pkgconfig.patch: Avoid wavpack.pc to be
+      broken after switching to Multi-Arch.
+  * Fix lintian's warnings:
+    - binary-control-field-duplicates-source
+    - copyright-refers-to-deprecated-bsd-license-file
+    - description-synopsis-starts-with-article
+  * Enable MMX extensions on amd64.
+  * Correct maintainer's name, add VCS fields.
+  * Bump debian/compat.
+  * Bump Standards version.
+  * Add gbp config file.
+
+ -- Alessio Treglia <alessio@debian.org>  Mon, 05 Dec 2011 11:36:14 +0100
+
+wavpack (4.60.1-1) unstable; urgency=low
+
+  * New upstream release:
+    + debian/rules:
+      - Some cleanup.
+    + debian/*.1.xml,
+      debian/wavpack.manpages,
+      debian/control:
+      - Manpages are upstream now.
+  * debian/source/format:
+    + Switch to 3.0 (quilt) and use upstream's tar.bz2.
+
+ -- Sebastian Dröge <slomo@debian.org>  Thu, 03 Dec 2009 09:51:39 +0100
+
+wavpack (4.60.0-1) unstable; urgency=low
+
+  * New upstream release:
+    + debian/libwavpack1.symbols,
+      debian/libwavpack1.shlibs:
+      - Updated for the API additions.
+  * debian/control:
+    + Updated Standards-Version to 3.8.3.
+    + Add ${shlibs:Depends} to the -dev package.
+  * debian/control,
+    debian/compat:
+    + Updated to debhelper compat level 6.
+
+ -- Sebastian Dröge <slomo@debian.org>  Mon, 05 Oct 2009 07:22:03 +0200
+
+wavpack (4.50.1-1) unstable; urgency=low
+
+  * New upstream bugfix release.
+
+ -- Sebastian Dröge <slomo@debian.org>  Fri, 18 Jul 2008 12:35:46 +0200
+
+wavpack (4.50.0-1) unstable; urgency=low
+
+  * New upstream release:
+    + debian/patches/01_memory-alignment.patch:
+      - Dropped, fixed different upstream.
+    + debian/libwavpack1.shlibs:
+      - Updated to >= 4.50.0 because of new flags for some functions.
+  * debian/control:
+    + Set maintainer to pkg-multimedia.
+    + Wrap control fields.
+    + Move homepage to the Homepage field.
+    + Update Standards-Version to 3.8.0, no additional changes needed.
+
+ -- Sebastian Dröge <slomo@debian.org>  Thu, 26 Jun 2008 13:02:38 +0200
+
+wavpack (4.41.0-2) unstable; urgency=low
+
+  * debian/libwavpack1.symbols,
+    debian/control:
+    + Add a symbol file for WavPack and build depend on new enough dpkg-dev
+      for this.
+  * debian/control:
+    + Update Standards-Version to 3.7.3, no additional changes needed.
+    + Use ${binary:Version} instead of ${Source-Version}.
+  * debian/patches/01_memory-alignment.patch:
+    + Fix alignment issues which result in a SIGBUS on sparc (Closes: #476234).
+
+ -- Sebastian Dröge <slomo@debian.org>  Tue, 15 Apr 2008 12:22:24 +0200
+
+wavpack (4.41.0-1) unstable; urgency=low
+
+  * New upstream release without API changes.
+  * debian/patches/01_fix-undefined-extern.diff:
+    + Dropped, not necessary anymore.
+
+ -- Sebastian Dröge <slomo@debian.org>  Mon, 21 May 2007 12:11:16 +0200
+
+wavpack (4.40.0-2) unstable; urgency=low
+
+  * Upload to unstable
+  * debian/control:
+    + Update to use my debian.org mail address
+
+ -- Sebastian Dröge <slomo@debian.org>  Mon, 16 Apr 2007 01:07:27 +0200
+
+wavpack (4.40.0-1) experimental; urgency=low
+
+  [ Sebastian Dröge ]
+  * New upstream release
+  * debian/control:
+    + Update package name for new soname and remove now unnecessary conflicts
+    + Drop unnecessary libncurses (build) dependency
+  * debian/rules:
+    + Adjust for new package name
+  * debian/libwavpack1.shlibs:
+    + Set shlibs minimal version from here
+  * debian/patches/01_fix-undefined-extern.diff:
+    + Updated for new file locations
+  * debian/compat:
+    + Update to 5
+
+  [ Loic Minier ]
+  * Add year 2006 to copyright.
+
+ -- Loic Minier <lool@dooz.org>  Mon, 11 Dec 2006 15:52:24 +0100
+
+wavpack (4.32-2) unstable; urgency=low
+
+  * Make sure that dh_makeshlibs of libwavpack0 is called before dh_shlibdeps
+    of wavpack to generate correct dependencies.
+
+ -- Sebastian Dröge <slomo@ubuntu.com>  Mon, 24 Apr 2006 20:30:48 +0200
+
+wavpack (4.32-1) unstable; urgency=low
+
+  * New upstream release:
+    + New wvgain utility for calculating and adding ReplayGain informations
+      to files
+    + Fix a crasher on big-endian systems
+    + Some usuability improvements to the commandline utilities
+  * No need to use -fsigned-char anymore
+  * debian/wvgain.1.xml: added manpage for the new wvgain utility
+  * List files which are not in any package after build
+  * Add a Conflict with gstreamer0.8-misc (<< 0.8.12-2) on libwavpack0 as this
+    update breaks ABI and gst-plugins0.8 has to be rebuild against the new
+    version. I didn't invent a .debian soname as upstream promises to use a
+    correct soname in the future when breaking ABI and gstreamer0.8-misc is
+    the only rdepend.
+
+ -- Sebastian Dröge <slomo@ubuntu.com>  Thu, 20 Apr 2006 11:58:09 +0200
+
+wavpack (4.3-2) unstable; urgency=low
+
+  * Use -fsigned-char to solve problems with decoding/encoding on different
+    archs where chars are unsigned by default (including powerpc)
+  * Install the README only in the -dev package
+
+ -- Sebastian Dröge <slomo@ubuntu.com>  Thu, 17 Nov 2005 18:38:32 +0100
+
+wavpack (4.3-1) unstable; urgency=low
+
+  * Initial Revision (Closes: #333087)
+  * 01_fix-undefined-extern.diff:
+    + Fix from Gnome BTS #321212 for setting an extern variable. Fixes
+      gstreamer plugin and maybe more
+
+ -- Sebastian Dröge <slomo@ubuntu.com>  Fri, 11 Nov 2005 16:42:07 +0100
