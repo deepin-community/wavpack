@@ -1,3 +1,35 @@
+wavpack (5.8.1-1) unstable; urgency=medium
+
+  * New upstream version 5.8.1
+  * debian/control: Bump Standards-Version
+
+ -- Sebastian Ramacher <sramacher@debian.org>  Sun, 02 Feb 2025 00:22:25 +0100
+
+wavpack (5.7.0-1) unstable; urgency=medium
+
+  * New upstream version 5.7.0
+  * debian/control: Bump Standards-Version
+  * debian/copyright: Update copyright years
+
+ -- Sebastian Ramacher <sramacher@debian.org>  Tue, 05 Mar 2024 21:31:49 +0100
+
+wavpack (5.6.0-1) unstable; urgency=medium
+
+  * New upstream version 5.6.0
+
+ -- Sebastian Ramacher <sramacher@debian.org>  Fri, 02 Dec 2022 21:49:01 +0100
+
+wavpack (5.5.0-1) unstable; urgency=medium
+
+  * New upstream version 5.5.0
+    - Fix out-of-bounds read (CVE-2021-44269)
+  * debian/control: Bump Standards-Version
+  * debian/copyright: Bump copyright years
+  * debian/libwavpack-dev.install: No longer install static library
+  * debian/rules: Build with --disable-rpath
+
+ -- Sebastian Ramacher <sramacher@debian.org>  Wed, 13 Jul 2022 10:33:29 +0200
+
 wavpack (5.4.0-1) unstable; urgency=medium
 
   * New upstream release

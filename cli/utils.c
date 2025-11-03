@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////
 //                           **** WAVPACK ****                            //
 //                  Hybrid Lossless Wavefile Compressor                   //
-//              Copyright (c) 1998 - 2006 Conifer Software.               //
+//                Copyright (c) 1998 - 2024 David Bryant.                 //
 //                          All Rights Reserved.                          //
 //      Distributed under the BSD Software License (see license.txt)      //
 ////////////////////////////////////////////////////////////////////////////
@@ -12,6 +12,9 @@
 // utilities and the self-extraction module.
 
 #if defined(_WIN32)
+#ifndef _WIN32_WINNT
+#define _WIN32_WINNT 0x0500 /* for GetConsoleWindow() */
+#endif
 #define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <io.h>
@@ -27,6 +30,7 @@
 #include <stdarg.h>
 #include <string.h>
 #include <stdio.h>
+#include <ctype.h>
 
 #include "wavpack.h"
 #include "utils.h"
@@ -37,6 +41,35 @@
 #define fputs fputs_utf8
 #define remove(f) unlink_utf8(f)
 #endif
+
+#ifdef __MINGW32__              // mingw32's _ftelli64() and _fseeki64() are defective
+#define _ftelli64 ftello64
+#define _fseeki64 fseeko64
+#endif
+
+// The C-standard function strtod() also handles hex numbers prefixed
+// with [+-]0[xX]. Unfortunately this causes problems for us in rare
+// cases where a value of zero is specified for one option followed
+// by the 'x' option (e.g., -s0x1). This version of strtod() does not
+// allow hex specification, but otherwise should be identical.
+
+double strtod_hexfree (const char *nptr, char **endptr)
+{
+    const char *sptr = nptr;
+
+    // skip past any leading whitespace and possibly a sign
+    while (isspace (*sptr)) sptr++;
+    if (*sptr == '+' || *sptr == '-') sptr++;
+
+    // if hex detected ("0x" or "0X"), return 0.0 and end at the X
+    if (*sptr == '0' && tolower (sptr [1]) == 'x') {
+        if (endptr) *endptr = (char *) sptr + 1;
+        return 0.0;
+    }
+
+    // otherwise unmodified strtod() result
+    return strtod (nptr, endptr);
+}
 
 #ifdef _WIN32
 
@@ -376,12 +409,15 @@ extern int debug_logging_mode;
 
 #ifdef _WIN32
 
+typedef HRESULT (WINAPI *getfolderpath_t)(HWND,int,HANDLE,DWORD,LPSTR); /* SHGetFolderPathA */
+typedef BOOL (WINAPI *getspecialfolderpath_t)(HWND,LPSTR,int,BOOL);     /* SHGetSpecialFolderPathA */
+
 int get_app_path (char *app_path)
 {
     static char file_path [MAX_PATH], tried, result;
 
     HINSTANCE hinstLib;
-    FARPROC ProcAdd;
+    getfolderpath_t getfolderpath;
 
     if (tried) {
         if (result)
@@ -394,15 +430,15 @@ int get_app_path (char *app_path)
     hinstLib = LoadLibrary ("shell32.dll");
 
     if (hinstLib) {
-        ProcAdd = GetProcAddress (hinstLib, "SHGetFolderPathA");
+        getfolderpath = (getfolderpath_t) GetProcAddress (hinstLib, "SHGetFolderPathA");
 
-        if (ProcAdd && SUCCEEDED ((ProcAdd) (NULL, CSIDL_APPDATA | 0x8000, NULL, 0, file_path)))
+        if (getfolderpath && SUCCEEDED (getfolderpath (NULL, CSIDL_APPDATA | 0x8000, NULL, 0, file_path)))
             result = TRUE;
 
         if (!result) {
-            ProcAdd = GetProcAddress (hinstLib, "SHGetSpecialFolderPathA");
-
-            if (ProcAdd && SUCCEEDED ((ProcAdd) (NULL, file_path, CSIDL_APPDATA, TRUE)))
+            getspecialfolderpath_t getspecialfolderpath;
+            getspecialfolderpath = (getspecialfolderpath_t) GetProcAddress (hinstLib, "SHGetSpecialFolderPathA");
+            if (getspecialfolderpath && getspecialfolderpath (NULL, file_path, CSIDL_APPDATA, TRUE) != 0)
                 result = TRUE;
         }
 
@@ -413,9 +449,9 @@ int get_app_path (char *app_path)
         hinstLib = LoadLibrary ("shfolder.dll");
 
         if (hinstLib) {
-            ProcAdd = GetProcAddress (hinstLib, "SHGetFolderPathA");
+            getfolderpath = (getfolderpath_t) GetProcAddress (hinstLib, "SHGetFolderPathA");
 
-            if (ProcAdd && SUCCEEDED ((ProcAdd) (NULL, CSIDL_APPDATA | 0x8000, NULL, 0, file_path)))
+            if (getfolderpath && SUCCEEDED (getfolderpath (NULL, CSIDL_APPDATA | 0x8000, NULL, 0, file_path)))
                 result = TRUE;
 
             FreeLibrary (hinstLib);
@@ -428,6 +464,26 @@ int get_app_path (char *app_path)
     return result;
 }
 
+void do_pause_mode (void)
+{
+    HWND consoleWnd = GetConsoleWindow ();
+    DWORD dwProcessId;
+
+    if (!consoleWnd)    // if there's no console window, don't pause
+        return;
+
+    GetWindowThreadProcessId (consoleWnd, &dwProcessId);
+
+    if (GetCurrentProcessId () != dwProcessId)
+        return;         // if there's a console window, but we don't own it, don't pause
+
+    fprintf (stderr, "\nPress any key to continue . . . ");
+    fflush (stderr);
+    while (!_kbhit ()) Sleep (100);
+    _getch ();
+    fprintf (stderr, "\n");
+}
+
 void error_line (char *error, ...)
 {
     char error_msg [512];
@@ -435,7 +491,7 @@ void error_line (char *error, ...)
 
     error_msg [0] = '\r';
     va_start (argptr, error);
-    vsprintf (error_msg + 1, error, argptr);
+    vsnprintf (error_msg + 1, sizeof (error_msg) - 1, error, argptr);
     va_end (argptr);
     fputs (error_msg, stderr);
     finish_line ();
@@ -479,7 +535,7 @@ void error_line (char *error, ...)
 
     error_msg [0] = '\r';
     va_start (argptr, error);
-    vsprintf (error_msg + 1, error, argptr);
+    vsnprintf (error_msg + 1, sizeof (error_msg) - 1, error, argptr);
     va_end (argptr);
     fputs (error_msg, stderr);
     finish_line ();
@@ -549,10 +605,12 @@ void finish_line (void)
 
     if (hConIn && GetConsoleScreenBufferInfo (hConIn, &coninfo) &&
         (coninfo.dwCursorPosition.X || coninfo.dwCursorPosition.Y)) {
-            unsigned char spaces = coninfo.dwSize.X - coninfo.dwCursorPosition.X;
-
-            while (spaces--)
-                fputc (' ', stderr);
+            DWORD spaces = coninfo.dwSize.X - coninfo.dwCursorPosition.X, written;
+            COORD cpos;
+            cpos.X = coninfo.dwCursorPosition.X;
+            cpos.Y = coninfo.dwCursorPosition.Y;
+            FillConsoleOutputCharacter (hConIn, ' ', spaces, cpos, &written);
+            fprintf (stderr, "\n");
     }
     else
         fprintf (stderr, "                                \n");
@@ -602,6 +660,45 @@ void setup_break (void)
 int check_break (void)
 {
     return break_flag;
+}
+
+#endif
+
+///////////////////////////////////////////////////////////////////////////
+// Determine the number of processor cores available for multi-threading //
+// This number, up to four, will be the default number of worker threads //
+///////////////////////////////////////////////////////////////////////////
+
+#ifdef ENABLE_THREADS
+
+#if defined(__APPLE__) || defined(__NetBSD__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__DragonFly__)
+#include <sys/sysctl.h>
+#elif defined(__GNUC__) && !defined(_WIN32)
+#include <sys/sysinfo.h>
+#endif
+
+int get_default_worker_threads (void)
+{
+    int num_processors = 1;
+
+#ifdef _WIN32
+    SYSTEM_INFO sysinfo;
+    GetSystemInfo (&sysinfo);
+    num_processors = sysinfo.dwNumberOfProcessors;
+#elif defined(__APPLE__) || defined(__NetBSD__) || defined(__FreeBSD__) || defined(__OpenBSD__) || defined(__DragonFly__)
+    size_t len = sizeof (num_processors);
+    int mib[2] = { CTL_HW, HW_NCPU };
+    sysctl (mib, 2, &num_processors, &len, NULL, 0);
+#elif defined (__GNUC__)
+    num_processors = get_nprocs ();
+#endif
+
+    if (num_processors <= 1)
+        return 0;
+    else if (num_processors > 4)
+        return 4;
+    else
+        return num_processors;
 }
 
 #endif
@@ -659,10 +756,11 @@ int64_t DoGetFileSize (FILE *hFile)
         return 0;
 
     fHandle = (HANDLE)_get_osfhandle(_fileno(hFile));
-    if (fHandle == INVALID_HANDLE_VALUE)
+
+    if (fHandle == INVALID_HANDLE_VALUE || GetFileType(fHandle) != FILE_TYPE_DISK)
         return 0;
 
-    Size.u.LowPart = GetFileSize(fHandle, &Size.u.HighPart);
+    Size.u.LowPart = GetFileSize(fHandle, (DWORD *) &Size.u.HighPart);
 
     if (Size.u.LowPart == INVALID_FILE_SIZE && GetLastError() != NO_ERROR)
         return 0;
@@ -767,4 +865,3 @@ void DoSetConsoleTitle (char *text)
 }
 
 #endif
-
