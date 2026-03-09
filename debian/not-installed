@@ -1,1 +1,7 @@
 usr/lib/*/libwavpack.la
+usr/share/doc/wavpack/README.md
+usr/share/doc/wavpack/WavPack5FileFormat.pdf
+usr/share/doc/wavpack/WavPack5LibraryDoc.pdf
+usr/share/doc/wavpack/WavPack5PortingGuide.pdf
+usr/share/doc/wavpack/style.css
+usr/share/doc/wavpack/wavpack_doc.html

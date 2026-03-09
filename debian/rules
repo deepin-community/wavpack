@@ -4,7 +4,7 @@ export DEB_BUILD_MAINT_OPTIONS=hardening=+all
 
 include /usr/share/dpkg/architecture.mk
 
-FLAGS  =
+FLAGS  = --disable-rpath
 ifeq (,$(filter-out armel armhf,$(DEB_HOST_ARCH)))
 FLAGS += --disable-asm
 endif
