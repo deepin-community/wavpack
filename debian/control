@@ -1,15 +1,13 @@
 Source: wavpack
 Section: sound
-Priority: optional
 Maintainer: Debian Multimedia Maintainers <debian-multimedia@lists.debian.org>
 Uploaders: Sebastian Dröge <slomo@debian.org>,
            Sebastian Ramacher <sramacher@debian.org>
 Build-Depends: debhelper-compat (= 13)
-Standards-Version: 4.5.1
+Standards-Version: 4.7.3
 Homepage: http://www.wavpack.com
 Vcs-Git: https://salsa.debian.org/multimedia-team/wavpack.git
 Vcs-Browser: https://salsa.debian.org/multimedia-team/wavpack
-Rules-Requires-Root: no
 
 Package: libwavpack1
 Architecture: any

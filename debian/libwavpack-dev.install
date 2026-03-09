@@ -1,4 +1,3 @@
 usr/lib/*/libwavpack.so
-usr/lib/*/libwavpack.a
 usr/include
 usr/lib/*/pkgconfig

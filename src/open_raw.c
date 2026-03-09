@@ -1,7 +1,7 @@
 ////////////////////////////////////////////////////////////////////////////
 //                           **** WAVPACK ****                            //
 //                  Hybrid Lossless Wavefile Compressor                   //
-//                Copyright (c) 1998 - 2019 David Bryant.                 //
+//                Copyright (c) 1998 - 2024 David Bryant.                 //
 //                          All Rights Reserved.                          //
 //      Distributed under the BSD Software License (see license.txt)      //
 ////////////////////////////////////////////////////////////////////////////
@@ -183,6 +183,13 @@ WavpackContext *WavpackOpenRawDecoder (
             main_bytes -= 4;
 
             if (multiple_blocks) {
+                if (main_bytes < 4) {
+                    if (error) strcpy (error, "main block overran available data!");
+                    raw_close_stream (raw_wv);
+                    raw_close_stream (raw_wvc);
+                    return NULL;
+                }
+
                 block_size = *mcp++;
                 block_size += *mcp++ << 8;
                 block_size += *mcp++ << 16;
@@ -230,6 +237,13 @@ WavpackContext *WavpackOpenRawDecoder (
                 corr_bytes -= 4;
 
                 if (multiple_blocks) {
+                    if (corr_bytes < 4) {
+                        if (error) strcpy (error, "correction block overran available data!");
+                        raw_close_stream (raw_wv);
+                        raw_close_stream (raw_wvc);
+                        return NULL;
+                    }
+
                     block_size = *ccp++;
                     block_size += *ccp++ << 8;
                     block_size += *ccp++ << 16;
